@@ -54,7 +54,14 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        # assign an index from a hash mod of the key
+        index = self._hash_mod(key)
+        # assign the first LinkedPair @ storage[index]to head
+        head = self.storage[index]
+        # create a new LP from 
+        new_head = LinkedPair(key, value)
+        new_head.next = head
+        self.storage[index] = new_head
 
 
 
@@ -66,7 +73,17 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        pos = self._hash_mod(key)
+        dummy_head = LinkedPair("dummy", "dummy")
+        head = dummy_head
+        dummy_head.next = self.storage[pos]
+
+        while head.next != None:
+            if head.next.key == key:
+                head.next = head.next.next
+                break
+            head = head.next
+        self.storage[pos] = dummy_head.next
 
 
     def retrieve(self, key):
@@ -77,7 +94,12 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        pos = self._hash_mod(key)
+        head = self.storage[pos]
+        while head != None:
+            if head.key == key:
+                return head.value
+            head = head.next
 
 
     def resize(self):
@@ -87,7 +109,15 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        prev_storage = self.storage
+        prev_capacity = self.capacity
+        self.capacity = prev_capacity * 2
+        self.storage = [None] * self.capacity
+        for i in range(prev_capacity):
+            head = prev_storage[i]
+            while head != None:
+                self.insert(head.key, head.value)
+                head = head.next
 
 
 
