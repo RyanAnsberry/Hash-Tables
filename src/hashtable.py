@@ -54,7 +54,17 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        # assign an index from a hash mod of the key
+        index = self._hash_mod(key)
+        # assign the first LinkedPair @ storage[index] to head
+        head = self.storage[index]
+        # create a new LP with key and value
+        new_head = LinkedPair(key, value)
+        # assign former head to new LP's next value
+        new_head.next = head
+        # assign new LP to storage[index]
+        self.storage[index] = new_head
+
 
 
 
@@ -66,7 +76,23 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        # assign an index and head
+        index = self._hash_mod(key)
+        head = self.storage[index]
+        # check if head (storage[index]) is None
+        if head is None:
+            return None
+        else:
+            # while head has a next value != None
+            while head.next != None:
+                # check if key matches LinkedPair key
+                if head.next.key == key:
+                    head.next = head.next.next
+                    break
+                # if no match assign head to next LinkedPair
+                head = head.next
+            # if head.next is None assign storage[index] to next (None)
+            self.storage[index] = head.next
 
 
     def retrieve(self, key):
@@ -77,7 +103,13 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        index = self._hash_mod(key)
+        head = self.storage[index]
+        # iterate through links
+        while head != None:
+            if head.key == key:
+                return head.value
+            head = head.next
 
 
     def resize(self):
@@ -87,7 +119,15 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        prev_storage = self.storage
+        prev_capacity = self.capacity
+        self.capacity = prev_capacity * 2
+        self.storage = [None] * self.capacity
+        for i in range(prev_capacity):
+            head = prev_storage[i]
+            while head != None:
+                self.insert(head.key, head.value)
+                head = head.next
 
 
 
